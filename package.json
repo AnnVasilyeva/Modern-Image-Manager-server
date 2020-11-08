@@ -1,0 +1,37 @@
+{
+  "name": "modern-image-manager-server",
+  "version": "1.0.0",
+  "description": "server",
+  "main": "server.js",
+  "scripts": {
+    "prestart": "npm install",
+    "start": "forever server.js",
+    "watch": "forever -w server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AnnVasilyeva/Modern-Image-Manager-server.git"
+  },
+  "keywords": [
+    "server"
+  ],
+  "author": "AnnV",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AnnVasilyeva/Modern-Image-Manager-server/issues"
+  },
+  "homepage": "https://github.com/AnnVasilyeva/Modern-Image-Manager-server#readme",
+  "dependencies": {
+    "@koa/cors": "^3.1.0",
+    "forever": "^3.0.2",
+    "koa": "^2.13.0",
+    "koa-body": "^4.2.0",
+    "koa-static": "^5.0.0",
+    "path": "^0.12.7",
+    "uuid": "^8.3.1"
+  },
+  "engines": {
+    "node": "11.x"
+  }
+}
