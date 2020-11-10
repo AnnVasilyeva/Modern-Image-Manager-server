@@ -2,10 +2,12 @@ const http = require('http');
 const path = require('path');
 const Image = require('./images');
 const Koa = require('koa');
+const fs = require('fs');
 const koaBody = require('koa-body');
 const koaStatic = require('koa-static');
 const cors = require('@koa/cors');
 const app = new Koa();
+
 
 const public = path.join(__dirname, '/public');
 app.use(cors());
@@ -23,28 +25,36 @@ app.use(async (ctx) => {
     const { method } = ctx.request;
     switch (method) {
         case "GET":
-            if (ctx.request.query.method === "allImages") {
-                ctx.response.body = await Image.getAll();
-                ctx.response.status = 200;
-            } else if (ctx.request.query.method === "imageById") {
-                const imageId = await Image.getById(ctx.request.query.id);
-                ctx.response.body = imageId;
+            switch (ctx.request.query.method) {
+                case 'allImages':
+                    const image = new Image();
+                    ctx.response.body = await image.getAll();
+                    ctx.response.status = 200;
+                    break;
+                case 'image':
+                    ctx.response.status = 200;
+                    ctx.response.body = fs.createReadStream(path.join(__dirname, 'public', ctx.request.query.id));
+                    break;
             }
             break;
         case "POST":
             if (ctx.request.query.method === "removeImage") {
-                await Image.delete(ctx.request.query.id);
-
+                const image = new Image();
+                await image.delete(ctx.request.query.id);
                 ctx.response.body = 'deleted';
                 ctx.response.status = 204;
                 return;
             } else {
+
                 const imagePost = new Image(
-                    ctx.request.body.url,
+                    ctx.request.files['files[]'],
                 );
-                await imagePost.save();
-                ctx.response.body = imagePost;
+
+                const response = await imagePost.save();
+
+                ctx.response.body = response;
                 ctx.response.status = 200;
+
                 return;
             }
         default:
