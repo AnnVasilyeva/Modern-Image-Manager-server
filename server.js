@@ -27,11 +27,13 @@ app.use(async (ctx) => {
         case "GET":
             switch (ctx.request.query.method) {
                 case 'allImages':
+                    console.log('get images list');
                     const image = new Image();
                     ctx.response.body = await image.getAll();
                     ctx.response.status = 200;
                     break;
                 case 'image':
+                    console.log('get image source');
                     ctx.response.status = 200;
                     ctx.response.body = fs.createReadStream(path.join(__dirname, 'public', ctx.request.query.id));
                     break;
@@ -39,13 +41,14 @@ app.use(async (ctx) => {
             break;
         case "POST":
             if (ctx.request.query.method === "removeImage") {
+                console.log('delete image');
                 const image = new Image();
                 await image.delete(ctx.request.query.id);
                 ctx.response.body = 'deleted';
                 ctx.response.status = 204;
                 return;
             } else {
-
+                console.log('save images');
                 const imagePost = new Image(
                     ctx.request.files['files[]'],
                 );
